@@ -1,0 +1,36 @@
+# You can use this file to create a conda environment for this pipeline:
+#   conda env create -f environment.yml
+name: rvfvtyping-env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+# conda-forge packages
+  - conda-forge::python=3.6
+  - conda-forge::biopython=1.78 
+  - conda-forge::curl=7.76.1
+  - conda-forge::pandas=1.0.1
+  - conda-forge::pycountry
+  - conda-forge::r-argparse=2.0.3
+  - conda-forge::r-base=4.0.3
+  - conda-forge::r-dplyr=1.0.5
+  - conda-forge::r-ggplot2=3.3.4
+  - conda-forge::r-rcolorbrewer=1.1_2
+  - conda-forge::r-rvcheck=0.1.8
+  - conda-forge::r-tidytree=0.3.4
+  - conda-forge::unzip=6.0
+  
+# bioconda packages
+  - bioconda::bioconductor-biostrings=2.58.0
+  - bioconda::bioconductor-ggtree=2.4.1
+  - bioconda::bioconductor-treeio=1.14.3
+  - bioconda::dendropy=4.5.2
+  - bioconda::diamond=2.0.9
+  - bioconda::entrez-direct=13.9
+  - bioconda::iqtree=2.0.3
+  - bioconda::mafft=7.475
+  - bioconda::nextflow=20.10.0
+  - bioconda::ncbi-genome-download=0.2.12
+  - bioconda::seqmagick=0.8.4
+
