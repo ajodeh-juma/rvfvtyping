@@ -45,10 +45,6 @@ conda env create -n rvfvtyping-env -f environment.yml
 conda activate rvfvtyping-env
 ```
 
-Extract the database
-
-```gunzip db/viral.protein.faa.dmnd.gz```
-
 ## Testing
 
   - Optional: Test the installation on a single FASTA 
@@ -100,22 +96,43 @@ Diamond options
 
 ## Output
 
-Several output files will be generated including a comma-separated values file will be a csv file with taxon name and lineage assigned for each input query sequence per line
+Several output files will be generated including a comma-separated values file (```lineages.csv```) will be a csv file with taxon name and lineage assigned for each input query sequence per line
 
 e.g.
 
-| Accession | lineage   | aLRT | UFbootstrap | Length | Percent_Ns | Aligned_Length | SubjectID | Segment | Product | PercentIdentity | Mismatches | Gaps | note |
-| ----------- |:---------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:| :----------:| :----------: |
-| AF134496      |  N      | 89      |  89    | 738 | 0.00    | 738 | YP_003848705.1 | M | glycoprotein | 98.8 | 3 | 0 | Assignement supported by phylogenetic analysis (UFbootstrap value >= 70) |
-| HM587118      |  L      |  99    | 100     | 490 | 0.00    | 490 | YP_003848705.1 | M | glycoprotein | 100 | 0 | 0 | Assignement supported by phylogenetic analysis (UFbootstrap value >= 70) |
-| DQ380189      |  L      |  99     | 100    | 3885 | 0.00    | 3885 | YP_003848705.1 | M | glycoprotein | 98.9 | 13 | 0 | Assignement supported by phylogenetic analysis (UFbootstrap value >= 70) |
-| HM587108      |  I    |  86     | 85    | 490 | 0.00    | 490 | YP_003848705.1 | M | glycoprotein | 100 | 0 | 0 | Assignement supported by phylogenetic analysis (UFbootstrap value >= 70) |
-| MG972973      |  C    |  87     | 90    | 3852 | 0.00    | 3591 | YP_003848705.1 | M | glycoprotein | 99.3 | 8 | 0 | Assignement supported by phylogenetic analysis (UFbootstrap value >= 70) |
-| DQ380221      |  D    |  85     | 98    | 3885 | 0.00    | 3591 | YP_003848705.1 | M | glycoprotein | 99.4 | 7 | 0 | Assignement supported by phylogenetic analysis (UFbootstrap value >= 70) |
 
-If the specified ```--guide_tree``` is ```ml-bayes```, two plots will be generated, a phylogenetic tree and a multiple sequence alignment plot:
+| Query | Lineage   | aLRT | UFbootstrap | Length | Ns(%) | Note | Year_first | Year_last | Countries |
+| ----------- |:---------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------: |
+| DQ380218|G|84|70|3885|0.00|assigned (bootstrap value >= 70)|1969|1993|Senegal;CAR;Zimbabwe;Guinea|
+| HM587118|L|99|100|490|0.00|assigned (bootstrap value >= 70)|1963|1995|Zimbabwe;Egypt;South Africa;Kenya|
+| DQ380221|D|92|98|3885|0.00|assigned (bootstrap value >= 70)|1973|1973|CAR|
+| DQ380222|J|77|27|3885|0.00|unassigned (bootstrap value < 70)||||
+| HM587045|B|89|97|490|0.00|assigned (bootstrap value >= 70)|1972|1972|Kenya|
+| DQ380189|L|99|100|3885|0.00|assigned (bootstrap value >= 70)|1963|1995|Zimbabwe;Egypt;South Africa;Kenya|
+| HM587125|O|92|98|490|0.00|assigned (bootstrap value >= 70)|1951|1951|South Africa|
+| HM587108|I|87|90|490|0.00|assigned (bootstrap value >= 70)|1955|1956|South Africa|
+| MG972973|C|88|96|3852|0.00|assigned (bootstrap value >= 70)|1976|2016|South Africa;Somalia;Uganda;Angola;Madagascar;Sudan;Zimbabwe;Mauritania;Saudi Arabia;Kenya|
+| AF134496|N|88|84|738|0.00|assigned (bootstrap value >= 70)|1975|1993|Senegal;Mauritania;Burkina Faso|
+| EU574086.1|J|74|33|1690|0.00|unassigned (bootstrap value < 70)||||
+| RVFV_Namibia_2011_MT561463_NAM_2011|C|89|95|3830|0.00|assigned (bootstrap value >= 70)|1976|2016|South Africa;Somalia;Uganda;Angola;Madagascar;Sudan;Zimbabwe;Mauritania;Saudi Arabia;Kenya|
 
+If ```--skip_diamond``` is not used, the classification file ```diamond_results.csv``` will be generated
 
+| QueryID | Length   | SubjectID | Segment | Product | PercentIdentity | Mismatches | Gaps |
+| ----------- |:---------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
+| HM587118 | 489 | YP_003848705.1 |M|glycoprotein|100|0|0|
+|MG972973|3591"YP_003848705.1|M|glycoprotein|99.3|8|0|
+|DQ380221|3591|YP_003848705.1|M|glycoprotein|99|4|7|0|
+|AF134496|738|YP_003848705.1|M|glycoprotein|98.8|3|0|
+|DQ380222|3591|YP_003848705.1|M|glycoprotein|99.2|9|0|
+|EU574086.1|795|YP_003848706.1|S|non-structural protein|97.4|7|0|
+|EU574086.1|735|YP_003848707.1|S|nucleocapsid|99.6|1|0|
+|RVFV_Namibia_2011_MT561463_NAM_2011|3558|YP_003848705.1|M|glycoprotein|99.2|9|0|
+|DQ380218|3591|YP_003848705.1|M|glycoprotein|99.5|6|0|
+|HM587108|489|YP_003848705.1|M|glycoprotein|100|0|0|
+|DQ380189|3591|YP_003848705.1|M|glycoprotein|98.9|13|0|
+|HM587125|489|YP_003848705.1|M|glycoprotein|99.4|1|0|
+|HM587045|489|YP_003848705.1|M|glycoprotein|100|0|0|
 
 <img src="https://github.com/ajodeh-juma/rvfvtyping/blob/master/docs/images/HM587125.tree.dist.png" width="300"> <img src="https://github.com/ajodeh-juma/rvfvtyping/blob/master/docs/images/HM587125.tree.msa.png" width="300">
 
