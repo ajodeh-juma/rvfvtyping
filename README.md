@@ -121,7 +121,7 @@ If ```--skip_diamond``` is not used, the classification file ```diamond_results.
 | QueryID | Length   | SubjectID | Segment | Product | PercentIdentity | Mismatches | Gaps |
 | ----------- |:---------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
 | HM587118 | 489 | YP_003848705.1 |M|glycoprotein|100|0|0|
-|MG972973|3591"YP_003848705.1|M|glycoprotein|99.3|8|0|
+|MG972973|3591|YP_003848705.1|M|glycoprotein|99.3|8|0|
 |DQ380221|3591|YP_003848705.1|M|glycoprotein|99|4|7|0|
 |AF134496|738|YP_003848705.1|M|glycoprotein|98.8|3|0|
 |DQ380222|3591|YP_003848705.1|M|glycoprotein|99.2|9|0|
