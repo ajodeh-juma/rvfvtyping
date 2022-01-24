@@ -116,7 +116,7 @@ e.g.
 | EU574086.1|J|74|33|1690|0.00|unassigned (bootstrap value < 70)||||
 | RVFV_Namibia_2011_MT561463_NAM_2011|C|89|95|3830|0.00|assigned (bootstrap value >= 70)|1976|2016|South Africa;Somalia;Uganda;Angola;Madagascar;Sudan;Zimbabwe;Mauritania;Saudi Arabia;Kenya|
 
-If ```--skip_diamond``` is not used, the classification file ```diamond_results.csv``` will be generated
+If ```--skip_diamond``` is not used, the classification file ```diamond_results.csv``` is not  generated
 
 | QueryID | Length   | SubjectID | Segment | Product | PercentIdentity | Mismatches | Gaps |
 | ----------- |:---------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
