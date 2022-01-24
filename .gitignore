@@ -1,5 +1,5 @@
 .DS_Store
-db/
+#db/
 results/
 work/
 bin/__pycache__/*
