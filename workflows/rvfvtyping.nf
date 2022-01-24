@@ -2,42 +2,9 @@
 /* --          VALIDATE INPUTS                 -- */
 ////////////////////////////////////////////////////
 
-// def valid_params = [
-//     group            : ['viral', 'bacteria', 'archaea', 'fungi'],
-//     formats          : ['fasta', 'protein-fasta'],
-//     section          : ['refseq', 'genbank'],
-//     assembly_levels  : ['all', 'complete', 'chromosome', 'scaffold', 'contig'],
-//     guide_tree       : ['ml-snps', 'ml-bayes']
-// ]
-
 params.summary_params = [:]
 
 // Validate input parameters
-// def groups = params.group ? params.group.split(',').collect{ it.trim().toLowerCase() } : []
-// if (!valid_params['group'].contains(params.group)) {
-//     exit 1, "Invalid group option: ${params.group}. Valid options for '--group': ${valid_params['group'].join(', ')}."
-// }
-
-// def formats = params.formats ? params.formats.split(',').collect{ it.trim().toLowerCase() } : []
-// if (!valid_params['formats'].contains(params.formats)) {
-//     exit 1, "Invalid formats option: ${params.formats}. Valid options for '--formats': ${valid_params['formats'].join(', ')}."
-// }
-
-// def section = params.section ? params.section.split(',').collect{ it.trim().toLowerCase() } : []
-// if (!valid_params['section'].contains(params.section)) {
-//     exit 1, "Invalid section option: ${params.section}. Valid options for '--section': ${valid_params['section'].join(', ')}."
-// }
-
-// def assembly_levels = params.assembly_levels ? params.assembly_levels.split(',').collect{ it.trim().toLowerCase() } : []
-// if (!valid_params['assembly_levels'].contains(params.assembly_levels)) {
-//     exit 1, "Invalid assembly_levels option: ${params.section}. Valid options for '--assembly_levels': ${valid_params['assembly_levels'].join(', ')}."
-// }
-
-// def guide_treesList = ['ml-snps', 'ml-bayes']
-// if (!guide_treesList.contains(params.guide_tree)) {
-//     exit 1, "Invalid guide tree algorithm option: ${params.guide_tree}. Valid options: ${guide_treesList.join(', ')}"
-// }
-
 
 // Check input path parameters to see if they exist
 checkPathParamList = [
@@ -45,18 +12,6 @@ checkPathParamList = [
 ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
-
-// // Check mandatory parameters
-// if (!params.download_genomes && !params.db) { exit 1, "No download RefSeq option or database specified!" }
-// if (params.download_genomes && params.db)   { Checks.download_genomes_db_warn(log) }
-// if (params.download_genomes) {Checks.download_genomes_warn(log)}
-// if (params.db) { ch_database = file(params.db) } 
-
-// // group channel
-// if (params.group) {
-//     ch_group = Channel
-//         .from(params.group)
-// }
 
 if (params.input) {
     ch_fasta_files = Channel
@@ -71,11 +26,6 @@ if (params.input) {
         .ifEmpty { exit 1, 'input fasta file(s) not specified!' }
 }
 
-// urls channels
-// ch_taxonomy_url = Channel.from(params.taxonomy_url)
-// ch_protein_acc2taxid_url = Channel.from(params.protein_accession2taxid_url)
-
-
 
 // Stage required files
 
@@ -83,7 +33,6 @@ if (params.input) {
 lineages_csv  = file("$projectDir/assets/G2-M-segment_Lineages.csv", checkIfExists: true)
 
 // diamond database file
-// db = file("$projectDir/db/viral.protein.faa.dmnd.gz")
 ch_database = Channel.fromPath(params.db)
     .map { fn -> 
            def meta = [:]
@@ -95,9 +44,6 @@ ch_database = Channel.fromPath(params.db)
 
 // representative sequences alignments
 reps_aln = file("$projectDir/assets/rvfv.representative.fasta", checkIfExists: true)
-
-// representative sequences guide trees
-// reps_tree = file("$projectDir/assets/rvfv.representative.fasta.treefile", checkIfExists: true)
 
 // Stage dummy file to be used as an optional input where required
 ch_dummy_file = file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
@@ -231,8 +177,6 @@ include { SNPS_TO_CSV                                            } from '../modu
 include { ORDER_BY_TIPLABELS                                     } from '../modules/local/process/order_by_tiplabels'                addParams( options: modules['mafft_align_query']                 )
 include { PLOT_TREE_SNPS                                         } from '../modules/local/process/plot_tree_snps'                    addParams( options: modules['plots']                             )
 include { PLOT_TREE_MSA                                          } from '../modules/local/process/plot_tree_msa'                     addParams( options: modules['plots']                             )
-// include { SUMMARY_LINEAGES as REPORT_WITH_LINEAGE                } from '../modules/local/process/summarize_lineages'                addParams( options: modules['summary']                           )
-
 include { REPORT as REPORT_WITH_LINEAGE                          } from '../modules/local/process/report'                            addParams( options: modules['report']                            )
 
 
