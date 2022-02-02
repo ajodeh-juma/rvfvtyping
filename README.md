@@ -80,8 +80,6 @@ The pipeline offers several parameters including as highlighted:
 ```
 Input/output options
   --input                      [string]  Input Fasta file for typing
-  --guide_tree                 [string]  specifies which guide tree to apply for phylogenetic inference, options ['ml-snps', 'ml-bayes'] [default: 
-                                         ml-bayes] 
   --outdir                     [string]  The output directory where the results will be saved. [default: ./results]
   --email                      [string]  Email address for completion summary.
 
