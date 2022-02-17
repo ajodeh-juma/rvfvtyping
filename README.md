@@ -12,6 +12,8 @@
   - [Citations](#citations)
   
 
+
+[![DOI](https://zenodo.org/badge/451463165.svg)](https://zenodo.org/badge/latestdoi/451463165)
 [![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A520.04.0-brightgreen.svg)](https://www.nextflow.io/)
 [![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](https://bioconda.github.io/)
 [![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23rvfvtyping-4A154B?logo=slack)](https://nfcore.slack.com/channels/rvfvtyping)

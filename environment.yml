@@ -27,10 +27,7 @@ dependencies:
   - bioconda::bioconductor-treeio=1.14.3
   - bioconda::dendropy=4.5.2
   - bioconda::diamond=2.0.9
-  - bioconda::entrez-direct=13.9
   - bioconda::iqtree=2.0.3
   - bioconda::mafft=7.475
   - bioconda::nextflow=20.10.0
-  - bioconda::ncbi-genome-download=0.2.12
-  - bioconda::seqmagick=0.8.4
 

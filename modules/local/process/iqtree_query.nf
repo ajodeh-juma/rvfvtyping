@@ -32,7 +32,6 @@ process IQTREE_QUERY {
     def software          = getSoftwareName(task.process)
     def memory            = task.memory.toString().replaceAll(' ', '')
     def prefix            = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
-    // -g $guide_tree \\
 
     """
     iqtree \\
