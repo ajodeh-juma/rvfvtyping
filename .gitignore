@@ -7,3 +7,10 @@ bin/__pycache__/*
 .vscode/
 .nextflow/
 .nextflow*
+bin/findSNPs.py
+bin/findSNPs.py
+bin/get_segment_lineages.py
+bin/get_segment_seqs.py
+bin/get_shared_strains.py
+bin/maskSNPs.py
+bin/utils.pyc

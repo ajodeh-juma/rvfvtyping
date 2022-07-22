@@ -20,6 +20,13 @@
                     "description": "Input Fasta file for typing",
                     "help_text": "Use this to specify the location of your input Fasta file. For example:\n\n```bash\n--input 'path/to/data/*.fasta'\n```\n\nPlease note the following requirements:\n\n1. The path must be enclosed in quotes\n2. The path must have at least one `*` wildcard character\n3."
                 },
+                "segment": {
+                    "type": "string",
+                    "description": "genomic segment of the virus. options are 'Gn', 'S', 'M' and 'L'",
+                    "fa_icon": "fas fa-ban",
+                    "hidden": false,
+                    "enum": ["Gn", "S", "M", "L"]
+                },
                 "outdir": {
                     "type": "string",
                     "description": "The output directory where the results will be saved.",

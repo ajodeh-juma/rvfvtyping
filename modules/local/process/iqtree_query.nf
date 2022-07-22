@@ -33,15 +33,34 @@ process IQTREE_QUERY {
     def memory            = task.memory.toString().replaceAll(' ', '')
     def prefix            = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
 
-    """
-    iqtree \\
-        -s $alignment \\
-        -nt AUTO \\
-        -ntmax $task.cpus \\
-        -mem $memory \\
-        $options.args \\
-        -redo 
 
-    echo \$(iqtree -version 2>&1) | sed 's/^IQ-TREE multicore version \\([0-9\\.]*\\) .*\$/\\1/' > ${software}.version.txt
-    """
+    if (params.segment == 'Gn') {
+        """
+        iqtree \\
+            -s $alignment \\
+            -nt AUTO \\
+            -m GTR+G4 \\
+            -ntmax $task.cpus \\
+            -mem $memory \\
+            $options.args \\
+            -redo 
+
+        echo \$(iqtree -version 2>&1) | sed 's/^IQ-TREE multicore version \\([0-9\\.]*\\) .*\$/\\1/' > ${software}.version.txt
+        """
+    } else {
+        """
+        iqtree \\
+            -s $alignment \\
+            -nt AUTO \\
+            -m GTR+I+G4 \\
+            -ntmax $task.cpus \\
+            -mem $memory \\
+            $options.args \\
+            -redo 
+
+        echo \$(iqtree -version 2>&1) | sed 's/^IQ-TREE multicore version \\([0-9\\.]*\\) .*\$/\\1/' > ${software}.version.txt
+        """
+    }
+
+    
 }

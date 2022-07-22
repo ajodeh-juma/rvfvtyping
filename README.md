@@ -67,10 +67,11 @@ To see all the options, use the ```--show_hidden_params``` flag e.g.
 
 ```nextflow run main.nf --help --show_hidden_params```
 
-A typical command
+A typical command to classify and assign lineages using the glycoprotein (Gn) classifier
 ```
 nextflow run main.nf \
    --input 'data/test/*.fa' \
+   --segment Gn \
    --outdir output-dir \
    -work-dir work-dir \
 ```
@@ -82,6 +83,7 @@ The pipeline offers several parameters including as highlighted:
 ```
 Input/output options
   --input                      [string]  Input Fasta file for typing
+  --segment                    [string]  genomic segment of the virus. options are 'Gn', 'S', 'M' and 'L'
   --outdir                     [string]  The output directory where the results will be saved. [default: ./results]
   --email                      [string]  Email address for completion summary.
 
@@ -90,9 +92,12 @@ Diamond options
 
 ```
 ### mandatory parameters
-|__parameter__ |__description__ |__type__ |
-| --- | --- | --- |
-|`--input`|Input Fasta file(s) format `.fa` or `.fasta` for typing .| ```string``` |
+
+| parameter   |                       description                       |   type    |
+|-------------|:-------------------------------------------------------:|:---------:|
+ | `--input`   | Input Fasta file(s) format `.fa` or `.fasta` for typing | `string`  |
+| `--segment` |    genomic segment of the virus. `Gn`, `S`, `M`, `L`    | `string`  |
+
 
 ## Output
 
@@ -136,6 +141,9 @@ If ```--skip_diamond``` is not used, the classification file ```diamond_results.
 
 <img src="https://github.com/ajodeh-juma/rvfvtyping/blob/master/docs/images/HM587125.tree.dist.png" width="300"> <img src="https://github.com/ajodeh-juma/rvfvtyping/blob/master/docs/images/HM587125.tree.msa.png" width="300">
 
+
+## Web application.
+The tool is also implemented as a web application at https://www.genomedetective.com/app/typingtool/rvfv/
 
 
 ## Pipeline Summary

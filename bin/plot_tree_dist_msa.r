@@ -136,15 +136,15 @@ names(tip_labels) <- accessions
 
 aln <- readDNAStringSet(filepath = alignment_file)
 
-tipseq_aln <- NULL
-for (i in aln@ranges@NAMES) {
-  if (width(aln[i]) > 815 | width(aln[i]) > 1306 ) {
-    tipseq_aln = subseq(aln, start = 816, end = 1305)
-  } else {
-    tipseq_aln = aln
-  }
-}
-tipseq_aln <- DNAStringSet(tipseq_aln)
+# tipseq_aln <- NULL
+# for (i in aln@ranges@NAMES) {
+#   if (width(aln[i]) > 815 | width(aln[i]) > 1306 ) {
+#     tipseq_aln = subseq(aln, start = 816, end = 1305)
+#   } else {
+#     tipseq_aln = aln
+#   }
+# }
+tipseq_aln <- DNAStringSet(aln)
 
 
 # calculate pairwise hamming distances among sequences

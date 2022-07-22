@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
+import re
 import argparse
 import logging
 import textwrap
@@ -34,7 +35,9 @@ def filter_input(fasta, out):
     """
 
     to_exclude = []
-    d = dict((x[0], x[1]) for x in fasta_iterator(fasta_name=fasta))
+
+    d = dict((re.sub(r'\W+', "_", x[0]), x[1]) for x in fasta_iterator(fasta_name=fasta))
+    # d = dict((x[0], x[1]) for x in fasta_iterator(fasta_name=fasta))
     with open(out, 'w') as f_out:
         for seqid, seq in d.items():
             seq = seq.lower()

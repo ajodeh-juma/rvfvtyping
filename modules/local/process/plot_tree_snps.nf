@@ -19,8 +19,9 @@ process PLOT_TREE_SNPS {
     }
 
     input:
-    tuple val(meta), path(tree)
-    tuple val(meta), path(snps)
+    tuple val(meta), path(trees)
+    // tuple val(meta), path(tree)
+    // tuple val(meta), path(snps)
     path (lineages)
 
     output:
@@ -31,8 +32,8 @@ process PLOT_TREE_SNPS {
 
     """
     plot_tree_snps.r \\
-        --treefile $tree \\
-        --snps $snps \\
+        --treefile ${trees[0]} \\
+        --snps ${trees[1]} \\
         --metadata $lineages \\
         --prefix ${prefix}
     """

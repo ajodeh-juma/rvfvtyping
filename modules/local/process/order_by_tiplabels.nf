@@ -19,8 +19,8 @@ process ORDER_BY_TIPLABELS {
     }
 
     input:
-    tuple val(meta), path(tree)
-    tuple val(meta), path(alignment)
+    tuple val(meta), path(tree_aln)
+    // tuple val(meta), path(alignment)
 
     output:
     tuple val(meta), path("*.fasta")       , emit: fasta
@@ -30,8 +30,9 @@ process ORDER_BY_TIPLABELS {
 
     """
     orderseqs_by_tiplabels.py \\
-        --alignment $alignment \\
-        --tree $tree \\
+        --tree ${tree_aln[0]} \\
+        --alignment ${tree_aln[1]} \\
+        --schema nexus \\
         --outfile ${prefix}.orderedseq.fasta
     """
 }

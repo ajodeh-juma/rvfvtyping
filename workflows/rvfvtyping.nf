@@ -13,6 +13,42 @@ checkPathParamList = [
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 
+// check given segment
+def segmentsList = ['Gn', 'S', 'M', 'L']
+if (!segmentsList.contains(params.segment)) {
+    exit 1, "Invalid segment option: ${params.segment}. Valid options: ${segmentsList.join(', ')}"
+} else {
+    ch_prefix = params.segment + '-Segment'
+}
+
+// Stage required files
+if (params.segment == 'Gn') {
+    fasta = file("$projectDir/segments/Gn/partial-M.representative.fasta", checkIfExists: true)
+    //fasta = file("$projectDir/segments/Gn/Gn.align.trim.fasta", checkIfExists: true)
+    lineages = file("$projectDir/segments/Gn/partial-M.Lineages.csv", checkIfExists: true)
+    n_threshold = 90
+
+}
+
+if (params.segment == 'S') {
+    fasta = file("$projectDir/segments/S/complete-S.align.trim.fasta", checkIfExists: true)
+    lineages = file("$projectDir/segments/S/complete-S.Lineages.csv", checkIfExists: true)
+    n_threshold = 90
+}
+
+if (params.segment == 'M') {
+    fasta = file("$projectDir/segments/M/complete-M.align.trim.fasta", checkIfExists: true)
+    lineages = file("$projectDir/segments/M/complete-M.Lineages.csv", checkIfExists: true)
+    n_threshold = 90
+}
+
+if (params.segment == 'L') {
+    fasta = file("$projectDir/segments/L/complete-L.align.trim.fasta", checkIfExists: true)
+    lineages = file("$projectDir/segments/L/complete-L.Lineages.csv", checkIfExists: true)
+    n_threshold = 90
+}
+
+
 if (params.input) {
     ch_fasta_files = Channel
         .fromPath(params.input)
@@ -27,10 +63,7 @@ if (params.input) {
 }
 
 
-// Stage required files
 
-// known lineages file
-lineages_csv  = file("$projectDir/assets/G2-M-segment_Lineages.csv", checkIfExists: true)
 
 // diamond database file
 ch_database = Channel.fromPath(params.db)
@@ -42,8 +75,7 @@ ch_database = Channel.fromPath(params.db)
            return  db 
          }
 
-// representative sequences alignments
-reps_aln = file("$projectDir/assets/rvfv.representative.fasta", checkIfExists: true)
+
 
 // Stage dummy file to be used as an optional input where required
 ch_dummy_file = file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
@@ -159,13 +191,12 @@ def get_tokeep(txt) {
 }
 
 
-
-
 ////////////////////////////////////////////////////
 /* --    IMPORT LOCAL MODULES/SUBWORKFLOWS     -- */
 ////////////////////////////////////////////////////
 
 include { GET_SOFTWARE_VERSIONS                                  } from '../modules/local/process/get_software_versions'             addParams( options: [publish_files : ['csv':'']]                 )
+include { PREPARE_LINEAGES_REPRESENTATIVE                        } from '../modules/local/subworkflow/prepare_lineages_reps'         addParams( options: [:]                                          )
 include { FILTER_INPUT                                           } from '../modules/local/process/filter_input'                      addParams( options: modules['filter']                            )
 include { GUNZIP_DATABASE                                        } from '../modules/local/process/gunzip_database'                   addParams( options: [:]                                          )
 include { DIAMOND_BLASTX                                         } from '../modules/local/process/diamond_blastx'                    addParams( options: [:]                                          )
@@ -188,11 +219,10 @@ include { REPORT as REPORT_WITH_LINEAGE                          } from '../modu
 workflow RVFVTYPING {
 
 
-    // lineages file channel
-    ch_lineages_csv                  = readIn(lineages_csv)
+    // input channels
+    ch_lineages_csv              = readIn(lineages)
+    ch_reps_alignment            = fasta
 
-    // channels for the different reference representative files
-    ch_reps_alignment                = reps_aln
 
     // channel to collect software versions
     ch_software_versions = Channel.empty()
@@ -204,8 +234,9 @@ workflow RVFVTYPING {
     ch_filtered_fasta = ch_fasta_files.join(ch_filter_input)
 
     // remove samples that failed percentage Ns threshold
+    println n_threshold
     ch_filtered_fasta
-        .filter { row -> check_input( row[0], row[2], 50.0 )  }
+        .filter { row -> check_input( row[0], row[2], n_threshold )  }
         .map {it[0..1]}
         .set { ch_filtered_fasta }
 
@@ -246,24 +277,16 @@ workflow RVFVTYPING {
     ch_snps_to_csv = SNPS_TO_CSV.out.csv
 
     // MODULE: order alignment by tip labels and plot tree with msa
-    ch_order_by_tiplabels_input = ch_newick_to_nexus_tree.join(ch_align_query_alignment)
-    ch_order_seq_tree = ch_order_by_tiplabels_input
+    ch_tree_alignment = ch_newick_to_nexus_tree.join(ch_align_query_alignment)
+    ch_tree_alignment
         .map { row -> 
         def meta = [:]
-        tree = row[1]
         meta.id = row[0].id
-        [ meta, tree ]
-        }
-    
-    ch_order_seq_align = ch_order_by_tiplabels_input
-        .map { row -> 
-        def meta = [:]
-        align = row[2]
-        meta.id = row[0].id
-        [ meta, align ]
-        }
+        [ meta , [ file(row[1], checkIfExists: true), file(row[2], checkIfExists: true) ] ]
+    }.set { ch_tree_alignment }
 
-    ORDER_BY_TIPLABELS ( ch_order_seq_tree, ch_order_seq_align )
+    ORDER_BY_TIPLABELS ( ch_tree_alignment )
+
     ch_order_by_tiplabels_align_fasta = ORDER_BY_TIPLABELS.out.fasta
 
     // get lineages channel for plotting
@@ -271,30 +294,17 @@ workflow RVFVTYPING {
     
     // MODULE: plot trees with snps data, lineages metadata and multiple sequence alignment
     ch_tree_snps_msa_input = ch_query_phylogeny.join(ch_snps_to_csv).join(ch_order_by_tiplabels_align_fasta)
-    ch_tree = ch_tree_snps_msa_input
+    ch_tree_snps_msa_input
         .map { row -> 
         def meta = [:]
-        tree = row[1]
         meta.id = row[0].id
-        [ meta, tree ]
-        }
-    ch_snps = ch_tree_snps_msa_input
-        .map { row -> 
-        def meta = [:]
-        snps = row[2]
-        meta.id = row[0].id
-        [ meta, snps  ]
-        }
-    ch_msa = ch_tree_snps_msa_input
-        .map { row -> 
-        def meta = [:]
-        msa = row[3]
-        meta.id = row[0].id
-        [ meta, msa  ]
-        }
-        
-    PLOT_TREE_SNPS ( ch_tree, ch_snps, ch_metadata.collect())
-    PLOT_TREE_MSA ( ch_tree, ch_msa ) 
+        [ meta , [ file(row[1], checkIfExists: true), file(row[2], checkIfExists: true), file(row[3], checkIfExists: true) ] ]
+    }.set { ch_tree_snps_msa_input }
+
+
+    // MODULE: Plot
+    PLOT_TREE_SNPS ( ch_tree_snps_msa_input, ch_metadata.collect())
+    PLOT_TREE_MSA ( ch_tree_snps_msa_input )
 
 
     // MODULE: Report results

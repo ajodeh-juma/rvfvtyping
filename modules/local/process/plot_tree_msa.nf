@@ -19,8 +19,9 @@ process PLOT_TREE_MSA {
     }
 
     input:
-    tuple val(meta), path(tree)
-    tuple val(meta), path(alignment)
+    tuple val(meta), path(trees)
+    // tuple val(meta), path(tree)
+    // tuple val(meta), path(alignment)
 
     output:
     tuple val(meta), path("*.pdf")      , emit: pdf
@@ -30,8 +31,8 @@ process PLOT_TREE_MSA {
 
     """
     plot_tree_dist_msa.r \\
-        --treefile $tree \\
-        --alignment $alignment \\
+        --treefile ${trees[0]} \\
+        --alignment ${trees[2]} \\
         --prefix ${prefix}
     """
 }
