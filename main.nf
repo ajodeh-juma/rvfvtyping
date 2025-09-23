@@ -54,8 +54,8 @@ if (params.validate_params) {
 ////////////////////////////////////////////////////
 /* --           RUN MAIN WORKFLOW              -- */
 ////////////////////////////////////////////////////
+include { RVFVTYPING } from './workflows/rvfvtyping' addParams( summary_params: summary_params )
 
 workflow {
-    include { RVFVTYPING } from './workflows/rvfvtyping' addParams( summary_params: summary_params )
     RVFVTYPING ()
 }
